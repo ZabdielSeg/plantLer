@@ -1,0 +1,41 @@
+*{
+
+  font-size: 16px;
+}
+
+.App {
+  text-align: center;
+}
+
+
+.probando {
+  height: 100%;
+  background-color: black;
+  width: 50%;
+}
+
+.container-center {
+  /* background-color: black; */
+  min-height: 90vh;
+  display: flex;
+  align-items: center;
+}
+
+.profile-layout {
+  min-height: 90vh;
+  display: flex;
+  align-items: center;
+  background-color: cadetblue;
+}
+
+.profile-div-centered {
+  background-color: chocolate;
+}
+
+.cover-text {
+  position: absolute;
+  /* background-color: coral; */
+  width: 50vw;
+  top: 50px;
+  left: 50%;
+}
