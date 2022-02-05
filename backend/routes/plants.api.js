@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const mongoose = require('mongoose');
-const User = require('../models/User');
+const User = require('../models/User.schema');
 const Plant = require('../models/Plant.schema');
 
 const isLoggedIn = require('../middlewares/isLoggedIn');

@@ -7,8 +7,8 @@ const PopoularPartnersCard = () => {
                 <div className="card-content container" style={{ width: '80%' }}>
                     <div className="media is-align-items-center">
                         <div className="media-left">
-                            <figure className="image is-96x96">
-                                <img className="is-rounded" src="https://bulma.io/images/placeholders/96x96.png" alt="Placeholder image" />
+                            <figure className="image is-128x128">
+                                <img className="is-rounded" src="https://bulma.io/images/placeholders/128x128.png" alt="Placeholder" />
                             </figure>
                         </div>
                         <div className="media-content">

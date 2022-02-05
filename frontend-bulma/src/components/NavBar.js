@@ -14,13 +14,13 @@ const NavBar = () => {
 
     return (
         <nav className="navbar" role="navigation" aria-label="main navigation">
-            <div class="navbar-brand">
-                <Link to='/' class="navbar-item">
+            <div className="navbar-brand">
+                <Link to='/' className="navbar-item">
                     <img src="https://bulma.io/images/bulma-logo.png" width="112" height="28" />
                 </Link>
 
 
-                <a role="button" id='burger' class="navbar-burger" aria-label="menu" aria-expanded="true" data-target="navbarBasicExample" onClick={toggleBurger}>
+                <a role="button" id='burger' className="navbar-burger" aria-label="menu" aria-expanded="true" data-target="navbarBasicExample" onClick={toggleBurger}>
                     <span aria-hidden="true"></span>
                     <span aria-hidden="true"></span>
                     <span aria-hidden="true"></span>
@@ -28,19 +28,19 @@ const NavBar = () => {
 
             </div>
 
-            <div id="navbarBasicExample" class="navbar-menu">
-                <div class="navbar-start">
-                    <Link to='/' class="navbar-item">
+            <div id="navbarBasicExample" className="navbar-menu">
+                <div className="navbar-start">
+                    <Link to='/' className="navbar-item">
                         Home
                     </Link>
 
-                    <Link to='products' class="navbar-item">
+                    <Link to='products' className="navbar-item">
                         All Products
                     </Link>
                 </div>
 
-                <div class="navbar-end">
-                    <div class='navbar-item' >
+                <div className="navbar-end">
+                    <div className='navbar-item' >
                         <Link to='cart' className="button">
                             <span className="icon">
                                 <FontAwesomeIcon icon={faShoppingCart} size='lg' />
@@ -49,13 +49,13 @@ const NavBar = () => {
                         </Link>
                     </div>
 
-                    <div class="navbar-item">
+                    <div className="navbar-item">
 
-                        <div class="buttons">
-                            <Link to="signup" class="button is-primary">
+                        <div className="buttons">
+                            <Link to="signup" className="button is-primary">
                                 <strong>Sign up</strong>
                             </Link>
-                            <Link to='login' class="button is-light">
+                            <Link to='login' className="button is-light">
                                 Log in
                             </Link>
 

@@ -6,6 +6,11 @@ const userSchema = new Schema(
       type: String,
       required: [true, 'Please enter a username']
     },
+    email: {
+      type: String,
+      required: [true, 'Please provide an email'],
+      unique: [true, 'The email is already in use']
+    },
     password: {
       type: String,
       required: [true, 'Provide a strong password']
@@ -15,7 +20,9 @@ const userSchema = new Schema(
     description: {
       type: String,
       maxlenght: 200
-    }
+    },
+    imageUrl: String, 
+    whatsAppNumber: String
   },
   {
     timestamps: true

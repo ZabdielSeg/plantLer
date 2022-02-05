@@ -1,8 +1,8 @@
 const router = require('express').Router();
 
-const User = require('../models/User');
+const User = require('../models/User.schema');
 
-router.get('/profile', (req, res, next) => {
+router.get('/profile/:id', (req, res, next) => {
   const { id } = req.params;
   User.findById(id)
     .populate('plants')

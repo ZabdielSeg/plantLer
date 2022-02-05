@@ -5,14 +5,14 @@ const CreatePlant = () => {
         <div className='hero is-fullheight-with-navbar'>
             <div className='hero-body'>
                 <form className="box column is-half is-offset-one-quarter">
-                    <div class="field is-horizontal">
-                        <div class="field-label is-normal">
-                            <label class="label">Name:</label>
+                    <div className="field is-horizontal">
+                        <div className="field-label is-normal">
+                            <label className="label">Name:</label>
                         </div>
-                        <div class="field-body">
-                            <div class="field">
-                                <p class="control is-expanded has-icons-left">
-                                    <input class="input" type="text" placeholder="Name" />
+                        <div className="field-body">
+                            <div className="field">
+                                <p className="control is-expanded has-icons-left">
+                                    <input className="input" type="text" placeholder="Name" />
                                     {/* <span class="icon is-small is-left">
                                         <i class="fas fa-user"></i>
                                     </span> */}
@@ -21,27 +21,27 @@ const CreatePlant = () => {
                         </div>
                     </div>
 
-                    <div class="field is-horizontal">
-                        <div class="field-label is-normal">
-                            <label class="label">Description:</label>
+                    <div className="field is-horizontal">
+                        <div className="field-label is-normal">
+                            <label className="label">Description:</label>
                         </div>
-                        <div class="field-body">
-                            <div class="field">
-                                <div class="control">
-                                    <textarea class="textarea" maxLength={'150'} minLength={'30'} placeholder="Guve a brief explanaion of the plant"></textarea>
+                        <div className="field-body">
+                            <div className="field">
+                                <div className="control">
+                                    <textarea className="textarea" maxLength={'150'} minLength={'30'} placeholder="Guve a brief explanaion of the plant"></textarea>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="field is-horizontal">
-                        <div class="field-label is-normal">
-                            <label class="label">Location:</label>
+                    <div className="field is-horizontal">
+                        <div className="field-label is-normal">
+                            <label className="label">Location:</label>
                         </div>
-                        <div class="field-body">
-                            <div class="field">
-                                <div class="control">
-                                    <div class="select is-fullwidth">
+                        <div className="field-body">
+                            <div className="field">
+                                <div className="control">
+                                    <div className="select is-fullwidth">
                                         <select>
                                             <option>Indoor</option>
                                             <option>Outdoor</option>
@@ -52,14 +52,14 @@ const CreatePlant = () => {
                         </div>
                     </div>
 
-                    <div class="field is-horizontal">
-                        <div class="field-label is-normal">
-                            <label class="label">Light:</label>
+                    <div className="field is-horizontal">
+                        <div className="field-label is-normal">
+                            <label className="label">Light:</label>
                         </div>
-                        <div class="field-body">
-                            <div class="field">
-                                <div class="control">
-                                    <div class="select is-fullwidth">
+                        <div className="field-body">
+                            <div className="field">
+                                <div className="control">
+                                    <div className="select is-fullwidth">
                                         <select>
                                             <option>Sol</option>
                                             <option>Sombra</option>
@@ -71,38 +71,38 @@ const CreatePlant = () => {
                         </div>
                     </div>
 
-                    <div class="field is-horizontal">
-                        <div class="field-label"></div>
-                        <div class="field-body">
-                            <div class="field is-narrow">
-                                <div class="field has-addons">
-                                    <p class="control">
-                                        <a class="button is-static">
+                    <div className="field is-horizontal">
+                        <div className="field-label"></div>
+                        <div className="field-body">
+                            <div className="field is-narrow">
+                                <div className="field has-addons">
+                                    <p className="control">
+                                        <a className="button is-static">
                                             $
                                         </a>
                                     </p>
-                                    <p class="control is-expanded">
-                                        <input class="input" type="number" placeholder="Set the price" />
+                                    <p className="control is-expanded">
+                                        <input className="input" type="number" placeholder="Set the price" />
                                     </p>
                                 </div>
-                                <p class="help">Do not enter the first zero</p>
+                                <p className="help">Do not enter the first zero</p>
                             </div>
                         </div>
                     </div>
 
-                    <div class="file has-name is-fullwidth">
-                        <div class="field-label is-normal">
-                            <label class="label">Choose A File:</label>
+                    <div className="file has-name is-fullwidth">
+                        <div className="field-label is-normal">
+                            <label className="label">Choose A File:</label>
                         </div>
-                        <div class="field-body">
-                        <div class="file">
-                            <label class="file-label">
-                                <input class="file-input" type="file" name="resume" />
-                                    <span class="file-cta">
-                                        <span class="file-icon">
-                                            <i class="fas fa-upload"></i>
+                        <div className="field-body">
+                        <div className="file">
+                            <label className="file-label">
+                                <input className="file-input" type="file" name="resume" />
+                                    <span className="file-cta">
+                                        <span className="file-icon">
+                                            <i className="fas fa-upload"></i>
                                         </span>
-                                        <span class="file-label">
+                                        <span className="file-label">
                                             Choose a file…
                                         </span>
                                     </span>

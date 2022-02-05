@@ -12,6 +12,7 @@ import HomePage from './components/HomePage/HomePage';
 import AllPlantsPage from './components/Plants/AllPlantsPage';
 import CartPage from './components/Plants/CartPage';
 import { Routes, Route } from 'react-router-dom';
+import 'react-multi-carousel/lib/styles.css';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -31,6 +32,7 @@ function App() {
         <Route path='/login' element={<Login />} />
         <Route path='/cart' element={<CartPage /> } />
         <Route path='/products' element={<AllPlantsPage />} /> 
+        <Route path='/info' element={<PlantDetails />} /> 
       </Routes>
       {/* <CreatePlant/> */}
       {/* <PlantDetails /> */}

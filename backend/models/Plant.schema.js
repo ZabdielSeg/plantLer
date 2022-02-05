@@ -21,11 +21,11 @@ const plantSchema = new Schema(
       type: String,
       enum: ['Sombra', 'Media Sombra', 'Sol', 'Sol Directo']
     }],
-    location:
-    {
+    location: {
       type: String,
       enum: ['Indoor, Outdoor']
     },
+    imageUrl: String
   }
 );
 
