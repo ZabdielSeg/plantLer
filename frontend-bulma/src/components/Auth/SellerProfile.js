@@ -1,70 +1,73 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import AllPlantsCard from "../Plants/AllPlantsCard";
+import AuthService from "./auth-service";
 
-const SellerProfile = () => {
+const SellerProfile = props => {
+    const [userInfo, setUserInfo] = useState({});
+    const [isOwner, setIsOwner] = useState(false);
+    useEffect(() => {
+        getUser();
+    }, [props.theUser]);
+    
+    // useEffect(() => {
+    //     ownProfileCheck()
+    // }, [userInfo]);
+
+    let { userId } = useParams();
+    const service = new AuthService();
+
+    const getUser = () => {
+        service.getProfile(userId)
+            .then(response => {
+                ownProfileCheck(response)
+                setUserInfo(response)
+            });
+    };
+
+    const ownProfileCheck = user => {
+        if (props.theUser && user._id == props.theUser._id) {
+            setIsOwner(true);
+            console.log('Sí es')
+        }
+    };
+
     return (
         <>
             <section className='section'>
                 <div className="columns">
                     <div className="column is-3 is-flex is-justify-content-center">
-                        <figure class="image is-128x128">
-                            <img class="is-rounded" src="https://bulma.io/images/placeholders/128x128.png" />
+                        <figure className="image is-128x128">
+                            <img className="is-rounded" src={userInfo.imageUrl} />
                         </figure>
                     </div>
-                    <div className="column">
+                    <div className="column is-8">
                         <div className="content is-medium">
-                            <h2>Name</h2>
-                            <p>Curabitur accumsan turpis pharetra <strong>augue tincidunt</strong> blandit. Quisque condimentum maximus mi, sit amet commodo arcu rutrum id. Proin pretium urna vel cursus venenatis. Suspendisse potenti</p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-            <section className='section'>
-                <div class="tile is-ancestor">
-                    <div class="tile is-8 is-vertical">
-                        <div class="tile">
-                            <div class="tile is-6 is-parent">
-                                <article class="tile is-child box">
-                                    <p class="title">Six</p>
-                                    <p class="subtitle">Subtitle</p>
-                                </article>
-                            </div>
-                            <div class="tile is-6 is-parent">
-                                <article class="tile is-child box">
-                                    <p class="title">Seven</p>
-                                    <p class="subtitle">Subtitle</p>
-                                </article>
-                            </div>
-                        </div>
-                        <div class="tile is-6 is-parent">
-                            <article class="tile is-child box">
-                                <p class="title">Eight</p>
-                                <p class="subtitle">Subtitle</p>
-                            </article>
-                        </div>
-                    </div>
-                    <div class="tile is-4 is-parent">
-                        <div class="tile is-child box">
-                            <p class="title">Contact info</p>
+                            <h2>{userInfo.username}</h2>
+                            <p>{userInfo.description}</p>
                         </div>
                     </div>
                 </div>
             </section>
 
-            {/* <section className='section has-background-blue'>
+            <section className='section'>
                 <div className="columns">
-                    <div className="column is-3 is-flex is-justify-content-center">
-                        <figure class="image is-128x128">
-                            <img class="is-rounded" src="https://bulma.io/images/placeholders/128x128.png" />
-                        </figure>
-                    </div>
                     <div className="column">
-                        <div className="content is-medium">
-                            <h2>Name</h2>
-                            <p>Curabitur accumsan turpis pharetra <strong>augue tincidunt</strong> blandit. Quisque condimentum maximus mi, sit amet commodo arcu rutrum id. Proin pretium urna vel cursus venenatis. Suspendisse potenti</p>
+                        <div className="content is-flex is-flex-wrap-wrap is-justify-content-space-evenly">
+                            {userInfo.plants && userInfo.plants.map(plant1 => <AllPlantsCard key={plant1._id} {...plant1} />)}
                         </div>
                     </div>
+                    <div className="column is-3 is-flex is-justify-content-center">
+                        <div className="content is-medium">
+                            {isOwner && <h2>Holaaaaa</h2>}
+                            <h2>Contact Info</h2>
+                            <p>{userInfo.email}</p>
+                            <p>{userInfo.whatsAppNumber}</p>
+                        </div>
+                    </div>
+
                 </div>
-            </section> */}
+            </section>
         </>
     )
 };

@@ -1,12 +1,27 @@
+import { useEffect, useState } from 'react';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
+import PlantService from '../Plants/plant-service';
 import CarouselItem from './CarouselItem';
 
-const DemoCarousel = () => {
+const CarouselPlants = props => {
+    const [products, setProducts] = useState([]);
+    useEffect(() => {
+        setProducts(props.allProducts);
+    }, [props.allProducts]);
+
+    // const servicePlants = new PlantService();
+
+    // const fetchAllProducts = () => {
+    //     servicePlants.getAllPlants()
+    //         .then(response => setProducts(response))
+    //         .catch(err => setProducts(false))
+    // };
+
     const responsive = {
         desktop: {
             breakpoint: { max: 3000, min: 1024 },
-            items: 2,
+            items: 3,
             slidesToSlide: 2 // optional, default to 1.
         },
         tablet: {
@@ -23,17 +38,13 @@ const DemoCarousel = () => {
 
     return (
         <div className='carousel-div'>
-            <Carousel responsive={responsive} showDots={true} itemClass="carousel-item" autoPlay={true} autoPlaySpeed={3000} infinite={true}>
-                <CarouselItem />
-                <CarouselItem />
-                <CarouselItem />
-                <CarouselItem />
-                <CarouselItem />
-                <CarouselItem />
-                <CarouselItem />
-            </Carousel>
+            {products &&
+                <Carousel responsive={responsive} showDots={true} itemClass="carousel-item" autoPlay={true} autoPlaySpeed={3000} infinite={true}>
+                    {products.map(plant => <CarouselItem key={plant.plantName} {...plant} />)}
+                </Carousel>
+            }
         </div>
     )
 }
 
-export default DemoCarousel;
+export default CarouselPlants;

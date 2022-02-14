@@ -1,18 +1,18 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const CarouselItem = () => {
+const CarouselItem = props => {
     return (
         // <>
-            <div>
-                <div>
-                    <img src='https://bulma.io/images/placeholders/128x128.png' alt='Prolie' style={{width: '40%'}} />
-                </div>
-                <div className=''>
-                    <h2 className='hekp'>Hello</h2>
-                    <Link to={'info'} className='button is-primary' >See More</Link>
-                </div>
+        <div style={{height: '100%'}}>
+            <div style={{ width: '100%', height: '50%'}}>
+                <img src={props.imageUrl} alt='Profile' style={{height: '100%'}} />
             </div>
+            <div className='' style={{ width: '100%', height: '50%'}}>
+                <h2 className='hekp'>{props.plantName}</h2>
+                <Link to={`plant/${props._id}`} className='button is-primary' >See More</Link>
+            </div>
+        </div>
         // </>
     )
 }

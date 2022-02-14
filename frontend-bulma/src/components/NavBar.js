@@ -1,9 +1,14 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
+import AuthService from './Auth/auth-service';
 
-const NavBar = () => {
+const NavBar = props => {
+    const [user, setUser] = useState({});
+    useEffect(() => {
+        setUser(props.theUser);
+    }, [props.theUser]);
 
     const toggleBurger = () => {
         let burgerIcon = document.getElementById('burger');
@@ -12,11 +17,18 @@ const NavBar = () => {
         dropMenu.classList.toggle('is-active');
     };
 
+    const service = new AuthService();
+
+    const handleLogOut = () => {
+        service.logout()
+            .then(() => props.getUser(null));
+    }
+
     return (
         <nav className="navbar" role="navigation" aria-label="main navigation">
             <div className="navbar-brand">
                 <Link to='/' className="navbar-item">
-                    <img src="https://bulma.io/images/bulma-logo.png" width="112" height="28" />
+                    <img src='https://res.cloudinary.com/ds3hh2gv2/image/upload/v1644629896/PlantLer/LogoPlantLer_rmspxe.jpg' width='50' alt='logo'/>
                 </Link>
 
 
@@ -40,24 +52,46 @@ const NavBar = () => {
                 </div>
 
                 <div className="navbar-end">
+                    {user &&
+                        <figure className="image is-48x48">
+                            <img alt='Profile' className="is-rounded" src={user.imageUrl} />
+                        </figure>
+                    }
                     <div className='navbar-item' >
                         <Link to='cart' className="button">
                             <span className="icon">
                                 <FontAwesomeIcon icon={faShoppingCart} size='lg' />
-                                <span>2</span>
+                                <span>{props.theCart.length}</span>
                             </span>
                         </Link>
                     </div>
 
                     <div className="navbar-item">
-
                         <div className="buttons">
-                            <Link to="signup" className="button is-primary">
-                                <strong>Sign up</strong>
-                            </Link>
-                            <Link to='login' className="button is-light">
-                                Log in
-                            </Link>
+                            {
+                                user
+                                    ?
+                                    <>
+                                        {user.isSeller
+                                            &&
+                                            <Link to={`/profile/${user._id}`} className="button is-primary">
+                                                <strong>Profile</strong>
+                                            </Link>
+                                        }
+                                        <button onClick={handleLogOut} className="button is-danger">
+                                            <strong>Logout</strong>
+                                        </button>
+                                    </>
+                                    :
+                                    <>
+                                        <Link to="signup" className="button is-primary">
+                                            <strong>Sign up</strong>
+                                        </Link>
+                                        <Link to='login' className="button is-light">
+                                            Log in
+                                        </Link>
+                                    </>
+                            }
 
                         </div>
                     </div>

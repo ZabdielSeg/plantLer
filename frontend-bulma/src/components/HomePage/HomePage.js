@@ -1,15 +1,15 @@
-import React from "react";
-import DemoCarousel from "./Carousel";
+import React, { useEffect, useState } from "react";
+import CarouselPlants from "./Carousel";
 import FrontPage from "./FrontPage";
 import PopoularPartnersSection from "./PopularPartners";
 import 'react-multi-carousel/lib/styles.css';
 
-const HomePage = () => {
+const HomePage = props => {
     return (
         <>
             <FrontPage />
             <PopoularPartnersSection />
-            <DemoCarousel />
+            <CarouselPlants allProducts={props.allProducts} />
         </>
     )
 }

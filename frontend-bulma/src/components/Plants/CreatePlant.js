@@ -1,10 +1,54 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSeedling, faUpload } from '@fortawesome/free-solid-svg-icons';
+import PlantService from './plant-service';
 
 const CreatePlant = () => {
+    const [plantName, setPlantName] = useState('');
+    const [description, setDescription] = useState('');
+    const [price, setPrice] = useState(0);
+    const [light, setLight] = useState('Sol');
+    const [location, setLocation] = useState('Indoor');
+    const [imageUrl, setImageUrl] = useState('');
+    const [fileName, setFileName] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
+
+    const handlePlantName = e => setPlantName(e.target.value);
+    const handleDescription = e => setDescription(e.target.value);
+    const handlePrice = e => setPrice(e.target.value);
+    const handleLight = e => setLight(e.target.value);
+    const handleLocation = e => setLocation(e.target.value);
+    const handleErrorMessage = () => {
+        setErrorMessage('');
+    };
+
+    const service = new PlantService();
+
+    const handleFileUpload = e => {
+        const uploadData = new FormData();
+        setFileName(e.target.files[0].name);
+
+        uploadData.append('imageUrl', e.target.files[0]);
+
+        service.uploadImage(uploadData)
+            .then(response => setImageUrl(response.imageUrl))
+            .catch(err => setErrorMessage(err.response.data.message))
+    }
+
+    const handleFormSubmit = e => {
+        e.preventDefault();
+        service.createPlant(plantName, description, price, light, location, imageUrl)
+            .then(response => console.log(response))
+            .catch(err => {
+                const errorDescription = err.response.data.message;
+                setErrorMessage(errorDescription);
+            });
+    }
+
     return (
         <div className='hero is-fullheight-with-navbar'>
             <div className='hero-body'>
-                <form className="box column is-half is-offset-one-quarter">
+                <form onSubmit={handleFormSubmit} className="box column is-half is-offset-one-quarter">
                     <div className="field is-horizontal">
                         <div className="field-label is-normal">
                             <label className="label">Name:</label>
@@ -12,10 +56,10 @@ const CreatePlant = () => {
                         <div className="field-body">
                             <div className="field">
                                 <p className="control is-expanded has-icons-left">
-                                    <input className="input" type="text" placeholder="Name" />
-                                    {/* <span class="icon is-small is-left">
-                                        <i class="fas fa-user"></i>
-                                    </span> */}
+                                    <input className="input" type="text" placeholder="Name" value={plantName} onChange={handlePlantName} />
+                                    <span className="icon is-small is-left">
+                                        <FontAwesomeIcon icon={faSeedling} size='lg' />
+                                    </span>
                                 </p>
                             </div>
                         </div>
@@ -28,7 +72,7 @@ const CreatePlant = () => {
                         <div className="field-body">
                             <div className="field">
                                 <div className="control">
-                                    <textarea className="textarea" maxLength={'150'} minLength={'30'} placeholder="Guve a brief explanaion of the plant"></textarea>
+                                    <textarea className="textarea" maxLength={'150'} minLength={'30'} placeholder="Give a brief explanaion of the plant" value={description} onChange={handleDescription}></textarea>
                                 </div>
                             </div>
                         </div>
@@ -42,9 +86,9 @@ const CreatePlant = () => {
                             <div className="field">
                                 <div className="control">
                                     <div className="select is-fullwidth">
-                                        <select>
-                                            <option>Indoor</option>
-                                            <option>Outdoor</option>
+                                        <select value={location} onChange={handleLocation}>
+                                            <option value='Indoor'>Indoor</option>
+                                            <option value='Outdoor'>Outdoor</option>
                                         </select>
                                     </div>
                                 </div>
@@ -60,10 +104,10 @@ const CreatePlant = () => {
                             <div className="field">
                                 <div className="control">
                                     <div className="select is-fullwidth">
-                                        <select>
-                                            <option>Sol</option>
-                                            <option>Sombra</option>
-                                            <option>Semisombra</option>
+                                        <select value={light} onChange={handleLight} >
+                                            <option value='Sol'>Sol</option>
+                                            <option value='Sombra'>Sombra</option>
+                                            <option value='Media Sombra'>Media Sombra</option>
                                         </select>
                                     </div>
                                 </div>
@@ -82,7 +126,7 @@ const CreatePlant = () => {
                                         </a>
                                     </p>
                                     <p className="control is-expanded">
-                                        <input className="input" type="number" placeholder="Set the price" />
+                                        <input className="input" type="number" placeholder="Set the price" value={price} onChange={handlePrice} />
                                     </p>
                                 </div>
                                 <p className="help">Do not enter the first zero</p>
@@ -95,22 +139,50 @@ const CreatePlant = () => {
                             <label className="label">Choose A File:</label>
                         </div>
                         <div className="field-body">
-                        <div className="file">
-                            <label className="file-label">
-                                <input className="file-input" type="file" name="resume" />
+                            <div className="file">
+                                <label className="file-label">
+                                    <input onChange={e => handleFileUpload(e)} className="file-input" type="file" name="imageUrl" />
                                     <span className="file-cta">
                                         <span className="file-icon">
-                                            <i className="fas fa-upload"></i>
+                                            <FontAwesomeIcon icon={faUpload} size='lg' />
                                         </span>
                                         <span className="file-label">
-                                            Choose a file…
+                                            {
+                                                fileName
+                                                ?
+                                                `${fileName}`
+                                                :
+                                                'Choose a file…'
+                                            }
                                         </span>
                                     </span>
-                            </label>
+                                </label>
+
+                                <small>For a better user experience we highly recommend you to select a 1:1 format picture</small>
+                            </div>
                         </div>
-                        </div>
-                        
                     </div>
+
+                    <div className="field is-horizontal">
+                        <div className="field-label">
+                        </div>
+                        <div className="field-body">
+                            <div className="field">
+                                <div className="control">
+                                    <button className="button is-primary">
+                                        Create plant
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {errorMessage &&
+                        <div className="notification is-danger is-light">
+                            <p onClick={handleErrorMessage} className="delete"></p>
+                            {errorMessage}
+                        </div>
+                    }
                 </form>
             </div>
         </div>

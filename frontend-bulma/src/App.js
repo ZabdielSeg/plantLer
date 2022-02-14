@@ -13,34 +13,60 @@ import AllPlantsPage from './components/Plants/AllPlantsPage';
 import CartPage from './components/Plants/CartPage';
 import { Routes, Route } from 'react-router-dom';
 import 'react-multi-carousel/lib/styles.css';
+import AuthService from './components/Auth/auth-service';
+import PlantService from './components/Plants/plant-service';
 
 function App() {
   const [user, setUser] = useState(null);
-  // useEffect(() => )
+  useEffect(() => {
+    fetchUser();
+  }, []);
 
-  const [products, setProducts] = useState(null);
+  const [products, setProducts] = useState([]);
+  useEffect(() => {
+    fetchAllProducts();
+  }, []);
 
-  const [cart, setCart] = useState(0);
+  const fetchAllProducts = () => {
+    servicePlants.getAllPlants()
+      .then(response => setProducts(response))
+      .catch(err => setProducts(false))
+  };
 
+  const [cart, setCart] = useState([]);
+
+  const serviceAuth = new AuthService();
+  const servicePlants = new PlantService();
+
+  const fetchUser = () => {
+    if (user === null) {
+      serviceAuth.loggedin()
+        .then(response => setUser(response))
+        .catch(err => setUser(false));
+    }
+  };
+
+  const getTheUser = userObj => {
+    setUser(userObj);
+  };
+
+  const updateCart = obj => {
+    setCart(obj);
+  }
 
   return (
     <div className="App">
-      <NavBar />
+      <NavBar theUser={user} theCart={cart} getUser={getTheUser} />
       <Routes>
-        <Route path='/' element={<HomePage />} />
-        <Route path='/signup' element={<Signup />} />
-        <Route path='/login' element={<Login />} />
-        <Route path='/cart' element={<CartPage /> } />
-        <Route path='/products' element={<AllPlantsPage />} /> 
-        <Route path='/info' element={<PlantDetails />} /> 
+        <Route path='/' element={<HomePage allProducts={products} />} />
+        <Route path='/signup' element={<Signup getUser={getTheUser} />} />
+        <Route path='/login' element={<Login getUser={getTheUser} />} />
+        <Route path='/cart' element={<CartPage />} />
+        <Route path='/products' element={<AllPlantsPage allProducts={products} />} />
+        <Route path='/plant/:id' element={<PlantDetails />} />
+        <Route path='/create-plant' element={<CreatePlant />} />
+        <Route path='/profile/:userId' element={<SellerProfile theUser={user} />} />
       </Routes>
-      {/* <CreatePlant/> */}
-      {/* <PlantDetails /> */}
-      {/* <SellerProfile /> */}
-      {/* <Footer /> */}
-      {/* <HomePage /> */}
-      {/* <AllPlantsPage /> */}
-      {/* <CartPage /> */}
       <Footer />
     </div>
   );
