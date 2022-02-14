@@ -17,13 +17,13 @@ const plantSchema = new Schema(
       type: Number,
       required: [true, 'Please set a price']
     },
-    light: [{
+    light: {
       type: String,
-      enum: ['Sombra', 'Media Sombra', 'Sol', 'Sol Directo']
-    }],
+      enum: ['Sombra', 'Media Sombra', 'Sol']
+    },
     location: {
       type: String,
-      enum: ['Indoor, Outdoor']
+      enum: ['Indoor', 'Outdoor']
     },
     imageUrl: String
   }

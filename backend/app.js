@@ -47,16 +47,17 @@ app.locals.title = 'PlantLer';
 
 // Enable authentication using session + passport
 app.use(session({
+  key: 'userID',
   secret: 'irongenerator',
-  resave: true,
-  saveUninitialized: true,
-  // store: MongoStore.create({
-  //   mongoUrl: 'mongodb://localhost/backend',
-  //   ttl: 60 * 60 * 24
-  // }),
+  resave: false,
+  saveUninitialized: false,
+  store: MongoStore.create({
+    mongoUrl: 'mongodb://localhost/backend',
+    ttl: 60 * 60 * 24
+  }),
   cookie: {
     maxAge: 1000 * 60 * 60 * 24 * 365,
-    sameSite: "none",
+    // sameSite: "none",
     secure: process.env.NODE_ENV === "production",
   }
 }));

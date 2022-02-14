@@ -1,7 +1,7 @@
 module.exports = (req, res, next) => {
-  if(req.isAuthenticated() && req.user.isSeller === true) {
-    return next();
+  if(req.isAuthenticated() && req.user.isSeller !== true) {
+    res.status(403).json({message: "Only plant sellers can do this"});
   } else {
-    res.status(403).json({message: "You're not allowed to be here"});
+    return next();
   }
 };

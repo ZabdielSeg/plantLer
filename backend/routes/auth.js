@@ -2,6 +2,7 @@ const express = require("express");
 const passport = require('passport');
 const router = express.Router();
 const User = require("../models/User.schema");
+const uploader = require('../config/cloudinary.config');
 
 // Bcrypt to encrypt passwords
 const bcrypt = require("bcrypt");
@@ -11,10 +12,9 @@ const isLoggedOut = require("../middlewares/isLoggedOut");
 const isLoggedIn = require("../middlewares/isLoggedIn");
 
 router.post("/signup", isLoggedOut, (req, res, next) => {
-  const { username, password, isSeller, description, email, whatsAppNumber } = req.body;
+  const { username, password, isSeller, description, email, whatsAppNumber, imageUrl } = req.body;
 
-  let theDescription;
-  if (!description) { theDescription = ''; }
+  let theDescription = !description ? '' : description;
 
   if (!username || !password || !email) {
     res.status(400).json({ message: 'Provide username, password and email' });
@@ -26,8 +26,7 @@ router.post("/signup", isLoggedOut, (req, res, next) => {
     return;
   }
 
-  let theWhatsAppNumber;
-  if (!whatsAppNumber) { theWhatsAppNumber = ''; }
+  let theWhatsAppNumber = !whatsAppNumber ? '' : whatsAppNumber;
 
   User.findOne({ email }, "email", (err, user) => {
     if (err) {
@@ -49,8 +48,9 @@ router.post("/signup", isLoggedOut, (req, res, next) => {
       password: hashPass,
       isSeller,
       description: theDescription,
-      plants: [], 
-      whatsAppNumber: theWhatsAppNumber
+      plants: [],
+      whatsAppNumber: theWhatsAppNumber,
+      imageUrl
     });
 
     newUser.save()
@@ -61,8 +61,8 @@ router.post("/signup", isLoggedOut, (req, res, next) => {
             return;
           }
           // Send the user's information to the frontend
-          const { username, email, isSeller, plants, description, whatsAppNumber } = aNewUser;
-          const theUser = { username, email, isSeller, plants, description, whatsAppNumber };
+          const { username, email, isSeller, plants, description, whatsAppNumber, imageUrl, _id } = aNewUser;
+          const theUser = { username, email, isSeller, plants, description, whatsAppNumber, imageUrl, _id };
           res.status(200).json(theUser);
           console.log(theUser);
         });
@@ -77,14 +77,17 @@ router.post("/signup", isLoggedOut, (req, res, next) => {
 
 router.post("/login", isLoggedOut, (req, res, next) => {
   passport.authenticate("local", (err, user, info) => {
-    if (err) return res.status(400).json(err);
+    if (err) {
+      console.log(err)
+      return res.status(400).json(err)
+    };
     if (!user) return res.status(400).json({ message: info });
     else {
       req.logIn(user, (err) => {
         if (err) console.log(err);
-        const { username, email, isSeller, plants, description, whatsAppNumber } = user;
-          const theUser = { username, email, isSeller, plants, description, whatsAppNumber };
-          res.status(200).json(theUser);
+        const { username, email, isSeller, plants, description, whatsAppNumber, imageUrl, _id } = user;
+        const theUser = { username, email, isSeller, plants, description, whatsAppNumber, imageUrl, _id };
+        res.status(200).json(theUser);
         console.log(req.user);
       });
     }
@@ -93,13 +96,15 @@ router.post("/login", isLoggedOut, (req, res, next) => {
 
 
 router.get('/loggedin', (req, res, next) => {
-  if (!req.user) res.json({ message: 'No user loggedin' });
-  const { username, isSeller, plants, description } = req.user;
-  const theUser = { username, isSeller, plants, description };
-  res.status(200).json(theUser);
+  if (req.isAuthenticated()) {
+    const { username, email, isSeller, plants, description, whatsAppNumber, imageUrl, _id } = req.user;
+    const theUser = { username, email, isSeller, plants, description, whatsAppNumber, imageUrl, _id };
+    res.status(200).json(theUser);
+  }
+  res.status(403).json({ message: 'No user loggedin' });
 });
 
-router.post("/logout", (req, res) => {
+router.post("/logout", isLoggedIn, (req, res) => {
   req.logout();
   res.status(200).json({ message: 'Log out success!' });
 });
