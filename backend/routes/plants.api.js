@@ -37,8 +37,8 @@ router.post('/create-plant', isSeller, (req, res, next) => {
     })
     .then(() => res.json({ message: `The plant was created succesfully` }))
     .catch(err => {
-      console.log(err)
-      res.status(500).json({ message: 'An error occured while creating the plant' })
+      console.log(err);
+      res.status(500).json({ message: 'An error occured while creating the plant' });
     });
 });
 

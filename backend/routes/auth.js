@@ -78,13 +78,13 @@ router.post("/signup", isLoggedOut, (req, res, next) => {
 router.post("/login", isLoggedOut, (req, res, next) => {
   passport.authenticate("local", (err, user, info) => {
     if (err) {
-      console.log(err)
-      return res.status(400).json(err)
-    };
-    if (!user) return res.status(400).json({ message: info });
+      console.log(err);
+      return res.status(400).json(err);
+    }
+    if (!user) return res.status(400).json({ message: info.message });
     else {
       req.logIn(user, (err) => {
-        if (err) console.log(err);
+        if (err) res.status(400).json(err);
         const { username, email, isSeller, plants, description, whatsAppNumber, imageUrl, _id } = user;
         const theUser = { username, email, isSeller, plants, description, whatsAppNumber, imageUrl, _id };
         res.status(200).json(theUser);

@@ -11,11 +11,11 @@ passport.use(new LocalStrategy({
     User.findOne({ email })
     .then(foundUser => {
       if (!foundUser) {
-        return done(null, false, 'Incorrect email');
+        return done(null, false, {message: 'Incorrect email'});
       }
 
       if (!bcrypt.compareSync(password, foundUser.password)) {
-        return done(null, false, 'Incorrect password');
+        return done(null, false, {message: 'Incorrect password'});
       }
 
       return done(null, foundUser);
