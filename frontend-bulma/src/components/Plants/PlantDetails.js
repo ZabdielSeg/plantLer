@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import PlantService from "./plant-service";
 
-const PlantDetails = () => {
+const PlantDetails = props => {
     const [plant, setPlant] = useState(null);
     useEffect(() => {
         getPlant();
@@ -15,37 +15,45 @@ const PlantDetails = () => {
     const getPlant = () => {
         servicePlant.getSinglePlant(id)
             .then(response => {
-                console.log(response)
-                setPlant(response)
+                setPlant(response);
             });
+    };
+
+    const openAndClosePicture = () => {
+        const modal = document.getElementById('modal-js-example');
+        modal.classList.toggle('is-active');
     }
 
+    const addCeros = num => {
+        if (!num.toString().includes('.')) return num += '.00';
+        if (num.toString().split('.')[1].length !== 2) return num += '0';
+        return num;
+    };
+
     return (
-        <div className="container-center">
+        <div className="section">
             {plant &&
-                <section className='section is-small'>
+                <div>
                     <div className="columns">
                         <div className="column is-5 is-flex is-justify-content-center is-flex-direction-column">
-                            <figure className="image is-2by1">
-                                <img src={plant.imageUrl} />
+                            <figure className="image is-1by1">
+                                <img src={plant.imageUrl} alt={plant.plantName} />
                             </figure>
-                            <button className="js-modal-trigger button is-primary" data-target="modal-js-example">
+                            <button onClick={openAndClosePicture} className="js-modal-trigger button is-primary" data-target="modal-js-example">
                                 See bigger
                             </button>
                         </div>
-                        <div className="column ">
-                            <div className="content is-medium">
-                                {/* <h1>Hello World</h1>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla accumsan, metus ultrices eleifend gravida, nulla nunc varius lectus, nec rutrum justo nibh eu lectus. Ut vulputate semper dui. Fusce erat odio, sollicitudin vel erat vel, interdum mattis neque.</p> */}
-                                <h2>{plant.plantName}</h2>
-                                <p>Curabitur accumsan turpis pharetra <strong>augue tincidunt</strong> blandit. Quisque condimentum maximus mi, sit amet commodo arcu rutrum id. Proin pretium urna vel cursus venenatis. Suspendisse potenti</p>
+                        <div className="column is-7 ">
+                            <div className="is-flex is-justify-content-space-evenly is-align-items-center is-flex-direction-column" style={{ height: '100%' }}>
+                                <h2 className="subtitle is-1">{plant.plantName}</h2>
+                                <p className="subtitle is-3">{plant.description}</p>
+                                <p className="subtitle is-4">Sold By: <Link className="is-size-4" to={`/profile/${plant.owner._id}`}>{plant.owner.username}</Link></p>
                                 <ul>
-                                    <li>In fermentum leo eu lectus mollis, quis dictum mi aliquet.</li>
-                                    <li>Morbi eu nulla lobortis, lobortis est in, fringilla felis.</li>
-                                    <li>Aliquam nec felis in sapien venenatis viverra fermentum nec lectus.</li>
-                                    <li>Ut non enim metus.</li>
+                                    <li className="is-size-4">Prefered Light: <b className="is-size-4">{plant.light}</b></li>
+                                    <li className="is-size-4">Where to place: <b className="is-size-4">{plant.location}</b></li>
                                 </ul>
-                                <button className="button is-primary is-outlined">
+                                <p className="subtitle is-4">Price: $<b className="is-size-4">{addCeros(plant.price)}</b></p>
+                                <button onClick={() => props.addToCart(plant)} className="button is-primary is-outlined is-large">
                                     <span className="icon">
                                         <FontAwesomeIcon icon={faShoppingCart} size='lg' />
                                     </span>
@@ -54,7 +62,18 @@ const PlantDetails = () => {
                             </div>
                         </div>
                     </div>
-                </section>
+                    <div id="modal-js-example" class="modal">
+                        <div class="modal-background"></div>
+
+                        <div class="modal-content">
+                            <div class="image is-5by4">
+                                <img src={plant.imageUrl} alt={plant.plantName} />
+                            </div>
+                        </div>
+
+                        <button onClick={openAndClosePicture} class="modal-close is-large" aria-label="close"></button>
+                    </div>
+                </div>
             }
         </div>
     );

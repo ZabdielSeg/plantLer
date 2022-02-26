@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthService from './auth-service';
-import { faAt, faKey } from "@fortawesome/free-solid-svg-icons";
+import { faAt, faEye, faEyeSlash, faKey } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const Login = props => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
     const service = new AuthService();
     const navigate = useNavigate();
 
@@ -26,23 +27,31 @@ const Login = props => {
                 setPassword('');
                 setErrorMessage('');
                 props.getUser(response);
-                navigate('/');
+                navigate(-1);
             })
             .catch(err => {
-                console.log(err) 
                 const errorDescription = err.response.data.message;
-               setErrorMessage(errorDescription);
+                setErrorMessage(errorDescription);
             });
+    };
+
+    const togglePassword = e => {
+        e.preventDefault();
+        setShowPassword(!showPassword);
+        const inputPass = document.getElementById('password');
+        if (!showPassword) inputPass.type = 'text';
+        if (showPassword) inputPass.type = 'password';
     };
 
     return (
         <div className='hero is-fullheight-with-navbar'>
             <div className='hero-body'>
                 <form onSubmit={handleFormSubmit} className="box column is-half is-offset-one-quarter">
+                    <h3 className='title'>Login</h3>
                     <div className="field">
                         <label className="label">Email</label>
                         <div className="control has-icons-left">
-                            <input name="email" className="input" type="email" placeholder="e.g. alex@example.com" value={email} onChange={handleEmail} />
+                            <input name="email" className="input" type="email" placeholder="e.g. alex@example.com" value={email} onChange={handleEmail} required />
                             <span className="icon is-small is-left">
                                 <FontAwesomeIcon icon={faAt} size='lg' />
                             </span>
@@ -51,15 +60,29 @@ const Login = props => {
 
                     <div className="field">
                         <label className="label">Password</label>
-                        <div className="control has-icons-left">
-                            <input name="password" className="input" type="password" placeholder="********" value={password} onChange={handlePassword} />
-                            <span className="icon is-small is-left">
-                                <FontAwesomeIcon icon={faKey} size='lg' />
-                            </span>
+                        <div className="field has-addons">
+                            <div className="control has-icons-left is-expanded">
+                                <input id="password" name="password" className="input" type="password" placeholder="********" value={password} onChange={handlePassword} required />
+                                <span className="icon is-small is-left">
+                                    <FontAwesomeIcon icon={faKey} size='lg' />
+                                </span>
+                            </div>
+                            <div className="control">
+                                <p className="button is-info">
+                                    <span className='icon is-small'>
+                                        {showPassword
+                                            ?
+                                            <FontAwesomeIcon onClick={togglePassword} icon={faEye} />
+                                            :
+                                            <FontAwesomeIcon onClick={togglePassword} icon={faEyeSlash} />
+                                        }
+                                    </span>
+                                </p>
+                            </div>
                         </div>
                     </div>
 
-                    <button className="button is-primary">Log in</button>
+                    <button type="submit" className="button is-primary">Log in</button>
 
                     {errorMessage &&
                         <div className="notification is-danger is-light">

@@ -14,25 +14,16 @@ const PopoularPartnersSection = () => {
             .then(response => setAllSellers(response));
     };
     return (
-        // <>
         <div className="popular-partners-div" style={{ minHeight: '500px' }}>
-            {/* <div className="content"> */}
             <h2 className="best-sellers-title">Our best Sellers</h2>
-            {/* </div> */}
             <div style={{ width: '90%' }}>
                 {allSellers &&
                     <div className="columns is-multiline">
-                        {allSellers.map(seller => <PopoularPartnersCard key={seller._id} {...seller} /> )}
-                        {/* <PopoularPartnersCard />
-                        <PopoularPartnersCard />
-                        <PopoularPartnersCard />
-                        <PopoularPartnersCard /> */}
+                        {allSellers.map(seller => <PopoularPartnersCard key={seller._id} {...seller} />)}
                     </div>
                 }
-
             </div>
         </div>
-        // </> 
     )
 }
 

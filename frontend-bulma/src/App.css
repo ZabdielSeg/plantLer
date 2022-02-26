@@ -20,7 +20,7 @@
   font-size: 2rem;
 }
 
-.best-sellers-title {
+.best-sellers-title, h2 {
   font-family: 'Rowdies', cursive;
   font-size: 3rem;
 }
@@ -80,12 +80,6 @@
 
 .carousel-item {
   height: 90%;
-  /* background-color: darkgray; */
-  /* display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center; */
-  /* border: 1px solid black; */
 }
 
 .carousel-item img {
@@ -94,7 +88,7 @@
 
 .hekp {
   /* background-color: darkmagenta; */
-  font-size: 3rem;
+  font-size: 2.5rem;
 }
 
 .popular-partners-div {
@@ -103,6 +97,38 @@
   flex-direction: column;
   justify-content: space-evenly;
   align-items: center;
+}
+
+.plant-card {
+  width: 30%; 
+  margin-top: 10px;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.card-information {
+  height: 30%; 
+  display: flex; 
+  justify-content: center; 
+  align-items: center;
+}
+
+.card-information > p {
+  color: white;
+  font-size: 1.8rem;
+}
+
+.creator-name {
+  text-shadow: 30px 10px 6px rgb(153, 153, 153);
+}
+
+.icon-footer-href {
+  color: black
+}
+
+.icon-footer-href:hover {
+  color: rgb(59, 165, 82);
 }
 
 @media (max-width: 1350px) {
@@ -120,19 +146,49 @@
     font-size: 4rem;
   }
 
-  .lema {
+  .lema, h2 {
     font-size: 1.7rem;
   }
 }
 
 @media (max-width: 910px) {
   .principal-title {
-    font-size: 2.5rem;
+    font-size: 2.7rem;
     width: 80%;
+  }
+  .plant-card {
+    width: 45%
   }
 
   .lema {
     font-size: 1.2rem;
     width: 80%;
+  }
+}
+
+@media (max-width: 600px) {
+  .plant-card {
+    width: 80%;
+  }
+  .principal-title {
+    font-size: 2rem;
+    width: 90%;
+  }
+
+  .lema {
+    font-size: 1rem;
+    width: 100%;
+  }
+}
+
+@media (max-width: 465px) {
+  .principal-title {
+    font-size: 1.5rem;
+    width: 100%;
+  }
+
+  .lema {
+    font-size: .5rem;
+    width: 100%;
   }
 }

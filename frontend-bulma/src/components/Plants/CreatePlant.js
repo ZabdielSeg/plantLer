@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSeedling, faUpload } from '@fortawesome/free-solid-svg-icons';
 import PlantService from './plant-service';
+import { useNavigate } from 'react-router-dom';
 
-const CreatePlant = () => {
+const CreatePlant = props => {
     const [plantName, setPlantName] = useState('');
     const [description, setDescription] = useState('');
     const [price, setPrice] = useState(0);
@@ -23,6 +24,7 @@ const CreatePlant = () => {
     };
 
     const service = new PlantService();
+    const history = useNavigate();
 
     const handleFileUpload = e => {
         const uploadData = new FormData();
@@ -38,7 +40,17 @@ const CreatePlant = () => {
     const handleFormSubmit = e => {
         e.preventDefault();
         service.createPlant(plantName, description, price, light, location, imageUrl)
-            .then(response => console.log(response))
+            .then(response => {
+                setPlantName('');
+                setDescription('');
+                setPrice(0);
+                setLight('Sol');
+                setLocation('Indoor');
+                setImageUrl('');
+                setFileName('');
+                props.reloadData();
+                history(-1);
+            })
             .catch(err => {
                 const errorDescription = err.response.data.message;
                 setErrorMessage(errorDescription);
@@ -49,6 +61,7 @@ const CreatePlant = () => {
         <div className='hero is-fullheight-with-navbar'>
             <div className='hero-body'>
                 <form onSubmit={handleFormSubmit} className="box column is-half is-offset-one-quarter">
+                    <h3 className='title'>Create plant</h3>
                     <div className="field is-horizontal">
                         <div className="field-label is-normal">
                             <label className="label">Name:</label>
@@ -116,7 +129,9 @@ const CreatePlant = () => {
                     </div>
 
                     <div className="field is-horizontal">
-                        <div className="field-label"></div>
+                        <div className="field-label is-normal">
+                            <label className='label'>Set a Price:</label>
+                        </div>
                         <div className="field-body">
                             <div className="field is-narrow">
                                 <div className="field has-addons">
@@ -126,7 +141,7 @@ const CreatePlant = () => {
                                         </a>
                                     </p>
                                     <p className="control is-expanded">
-                                        <input className="input" type="number" placeholder="Set the price" value={price} onChange={handlePrice} />
+                                        <input className="input" type="number" placeholder="Set the price" value={price} onChange={handlePrice} step="0.01" />
                                     </p>
                                 </div>
                                 <p className="help">Do not enter the first zero</p>
@@ -149,10 +164,10 @@ const CreatePlant = () => {
                                         <span className="file-label">
                                             {
                                                 fileName
-                                                ?
-                                                `${fileName}`
-                                                :
-                                                'Choose a file…'
+                                                    ?
+                                                    `${fileName}`
+                                                    :
+                                                    'Choose a file…'
                                             }
                                         </span>
                                     </span>

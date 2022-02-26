@@ -1,8 +1,9 @@
 import { React, useState, useEffect } from 'react';
-import PlantService from './plant-service';
 import AllPlantsCard from './AllPlantsCard';
+import FilterService from './sort-and-filters-service';
 
 const AllPlantsPage = props => {
+    const filter = new FilterService();
     const [products, setProducts] = useState([]);
     useEffect(() => {
         setProducts(props.allProducts);
@@ -28,6 +29,12 @@ const AllPlantsPage = props => {
         checkFilters();
     }, [onlyOutdoorPlants]);
 
+    const [productsShown, setProductsShown] = useState([]);
+    useEffect(() => {
+        setProductsShown([...products]);
+        console.log(productsShown);
+    }, [products]);
+
     const handleSorting = () => {
         setSortedByName(!sortedByName);
         setSortedByCost(false);
@@ -40,54 +47,33 @@ const AllPlantsPage = props => {
     const handleOnlyIndoor = () => {
         setOnlyIndoorPlants(!onlyIndoorPlants);
         setOnlyOutdoorPlants(false);
-    }
+    };
 
     const handleOutdoor = () => {
         setOnlyOutdoorPlants(!onlyOutdoorPlants);
         setOnlyIndoorPlants(false);
-    }
-
-    const sortByName = () => {
-        const sorted = [...products].sort((a, b) => {
-            if (a.plantName.toLowerCase() > b.plantName.toLowerCase()) { return 1 }
-            if (b.plantName.toLowerCase() > a.plantName.toLowerCase()) { return -1 }
-            return 0;
-        });
-        setProducts(sorted);
-    };
-
-    const sortByCost = () => {
-        const sorted = [...products].sort((a, b) => a.price - b.price);
-        setProducts(sorted);
-    };
-
-    const onlyIndoor = () => {
-        const filtered = [...props.allProducts].filter(plant => plant.location === 'Indoor');
-        setProducts(filtered);
-    };
-
-    const onlyOutdoor = () => {
-        const filtered = [...props.allProducts].filter(plant => plant.location === 'Outdoor');
-        setProducts(filtered);
     };
 
     const checkAllSortings = () => {
-        if (sortedByName) {sortByName();}
-        if (sortedByCost) {sortByCost();}
-        if (!sortedByName && !sortedByCost) {setProducts(props.allProducts)}
+        if (sortedByName) { setProductsShown(filter.sortByName(productsShown)); }
+        if (sortedByCost) { setProductsShown(filter.sortByCost(productsShown)); }
+        if (!sortedByName && !sortedByCost && !onlyIndoorPlants && !onlyOutdoorPlants) { setProductsShown(props.allProducts); }
     };
 
     const checkFilters = () => {
-        if(onlyIndoorPlants) {onlyIndoor();}
-        if(onlyOutdoorPlants) {onlyOutdoor();}
-        if(!onlyIndoorPlants && !onlyOutdoorPlants) {setProducts(props.allProducts)}
-    }
+        if (onlyIndoorPlants) { setProductsShown(filter.onlyIndoor(products)); }
+        if (onlyOutdoorPlants) { setProductsShown(filter.onlyOutdoor(products)); }
+        if (!sortedByName && !sortedByCost && !onlyIndoorPlants && !onlyOutdoorPlants) { setProductsShown(props.allProducts); }
+    };
 
-    // console.log('Cost ===>',sortedByCost, 'Name ===> ', sortedByName, products)
+    const abx = obj => {
+        props.addToCart(obj);
+    };
+
     return (
         <>
             <div>
-                <div className='field'>
+                <div className='section box is-flex is-flex-wrap-wrap is-justify-content-space-evenly' style={{ width: '90%', margin: '20px auto' }}>
                     <label className="checkbox">
                         <input onChange={handleSorting} checked={sortedByName} type="checkbox" />
                         Sort by Name
@@ -107,7 +93,9 @@ const AllPlantsPage = props => {
                 </div>
             </div>
             <div className='section is-flex is-flex-wrap-wrap is-justify-content-space-evenly' style={{ minHeight: '500px' }}>
-                {products.map(product => <AllPlantsCard key={product._id} {...product} />)}
+                {
+                    productsShown.map(product => <AllPlantsCard addItem={() => abx(product)} key={product._id} {...product} />)
+                }
             </div>
         </>
     )

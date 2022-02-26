@@ -1,42 +1,43 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 
 const AllPlantsCard = props => {
-    const [price, setPrice] = useState('');
-    useEffect(() => {
-        setPrice(addCeros(props.price))
-    }, [props])
 
-    const addCeros = num => {
-        if (!num.toString().includes('.')) return num += '.00';
-        return num;
-    }
+    const updateCart = () => {
+        props.addItem();
+    };
 
     return (
-        <div className='card' style={{ width: '30%', marginTop: '10px', marginBottom: '20px' }}>
+        <div className='card plant-card'>
             <div className="card-image" style={{ width: '80%', margin: 'auto' }}>
                 <figure className="image is-4by3">
-                    <img src={props.imageUrl} alt="Placeholder" className="" />
+                    <img src={props.imageUrl} alt="Placeholder" style={{ objectFit: 'contain' }} />
                 </figure>
             </div>
 
             <div className="card-content">
                 <div className="media">
                     <div className="media-content">
-                        <p className="title is-4">{props.plantName}</p>
-                        <p className="subtitle is-6">${price}</p>
+                        <p className="is-size-4">{props.plantName}</p>
+                        <p className="is-size-6">${(props.price).toFixed(2)}</p>
                     </div>
-                </div>
-
-                <div className="content">
-                    {props.description}
-                    <br />
                 </div>
             </div>
 
-            <footer className="card-footer is-flex is-justify-content-center">
-                <button className="button is-primary card-footer-item">Add to cart</button>
-                <Link  className="button is-primary card-footer-item" to={`/plant/${props._id}`}>More Info</Link>
+            <footer className="card-footer">
+                {props.isOwner
+                    ?
+                    <div className="is-flex is-flex-direction-column" style={{width: '100%'}}>
+                        <button onClick={() => props.removeItem(props._id)} className="button is-danger card-footer-item is-small">Delete</button>
+                        <Link to={`edit-plant/${props._id}`} className="button is-info card-footer-item is-small">Edit Plant</Link>
+                        <Link className="button is-primary card-footer-item is-small" to={`/plant/${props._id}`}>More Info</Link>
+                    </div>
+                    :
+                    <>
+                        <button onClick={updateCart} className="button is-primary card-footer-item">Add to cart</button>
+                        <Link className="button is-primary card-footer-item" to={`/plant/${props._id}`}>More Info</Link>
+                    </>
+                }
             </footer>
         </div>
     )

@@ -42,7 +42,12 @@ class AuthService {
     getAllSellers = () => {
         return this.service.get('/all-sellers')
             .then(response => response.data);
-    }
+    };
+
+    editUserInfo = (id, username, email, imageUrl, description, whatsAppNumber) => {
+        return this.service.put(`/edit-user-info/${id}`, {username, email, imageUrl, description, whatsAppNumber})
+            .then(response => response.data);
+    };
 }
 
 export default AuthService;

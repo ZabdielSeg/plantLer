@@ -19,8 +19,8 @@ class PlantService {
             .then(response => response.data)
     }
 
-    editPlant = (id, plantName, description, price, light, location) => {
-        return this.service.put(`/edit-plant/${id}`, {plantName, description, price, light, location})
+    editPlant = (id, plantName, description, price, light, location, imageUrl) => {
+        return this.service.put(`/edit-plant/${id}`, {plantName, description, price, light, location, imageUrl})
             .then(response => response.data)
     };
 

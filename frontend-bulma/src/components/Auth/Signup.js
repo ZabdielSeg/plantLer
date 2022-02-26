@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAt, faKey, faPhoneAlt, faUpload, faUserAlt } from '@fortawesome/free-solid-svg-icons';
-import { Link, Navigate } from 'react-router-dom';
+import { faAt, faEye, faEyeSlash, faKey, faPhoneAlt, faUpload, faUserAlt } from '@fortawesome/free-solid-svg-icons';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import AuthService from './auth-service';
 
 const Signup = props => {
@@ -14,7 +14,9 @@ const Signup = props => {
     const [imageUrl, setImageUrl] = useState('');
     const [fileName, setFileName] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
     const service = new AuthService();
+    const navigate = useNavigate();
 
     const handleUsername = e => setUsername(e.target.value);
     const handleEmail = e => setEmail(e.target.value);
@@ -39,8 +41,15 @@ const Signup = props => {
         service.uploadImage(uploadData)
             .then(response => setImageUrl(response.imageUrl))
             .catch(err => setErrorMessage(err.response.data.message))
-    }
+    };
 
+    const togglePassword = e => {
+        e.preventDefault();
+        setShowPassword(!showPassword);
+        const inputPass = document.getElementById('password');
+        if (!showPassword) inputPass.type = 'text';
+        if (showPassword) inputPass.type = 'password';
+    };
 
     const handleFormSubmit = e => {
         e.preventDefault();
@@ -54,7 +63,7 @@ const Signup = props => {
                 setImageUrl('');
                 setFileName('');
                 props.getUser(response);
-                Navigate('/');
+                navigate('/');
             })
             .catch(err => {
                 const errorDescription = err.response.data.message;
@@ -64,11 +73,9 @@ const Signup = props => {
 
     return (
         <div className='hero is-fullheight-with-navbar'>
-            <div className='hero-body is-small box column is-half is-offset-one-quarter'>
-                <h3 className='title'>Signup</h3>
-            </div>
             <div className='hero-body'>
                 <form onSubmit={handleFormSubmit} className="box column is-half is-offset-one-quarter">
+                    <h3 className='title'>Signup</h3>
                     <div className="field">
                         <label className="label">Username</label>
                         <div className="control has-icons-left">
@@ -81,22 +88,35 @@ const Signup = props => {
 
                     <div className="field">
                         <label className="label">Email</label>
-                        <div className="control has-icons-left has-icons-right">
-                            <input name='email' className="input is-danger" required type="email" placeholder="youremail@example.com" value={email} onChange={handleEmail} />
+                        <div className="control has-icons-left ">
+                            <input name='email' className="input" required type="email" placeholder="youremail@example.com" value={email} onChange={handleEmail} />
                             <span className="icon is-small is-left">
                                 <FontAwesomeIcon icon={faAt} size='lg' />
                             </span>
                         </div>
-                        <p className="help is-danger">This email is invalid</p>
                     </div>
 
                     <div className="field">
                         <label className="label">Password</label>
-                        <div className="control has-icons-left">
-                            <input name='password' className="input" required value={password} onChange={handlePassword} type="password" placeholder="********" />
-                            <span className="icon is-small is-left">
-                                <FontAwesomeIcon icon={faKey} size='lg' />
-                            </span>
+                        <div className="field has-addons">
+                            <div className="control has-icons-left is-expanded">
+                                <input id='password' name='password' className="input" required value={password} onChange={handlePassword} type="password" placeholder="********" />
+                                <span className="icon is-small is-left">
+                                    <FontAwesomeIcon icon={faKey} size='lg' />
+                                </span>
+                            </div>
+                            <div className="control">
+                                <p className="button is-info">
+                                    <span className='icon is-small'>
+                                        {showPassword
+                                            ?
+                                            <FontAwesomeIcon onClick={togglePassword} icon={faEye} />
+                                            :
+                                            <FontAwesomeIcon onClick={togglePassword} icon={faEyeSlash} />
+                                        }
+                                    </span>
+                                </p>
+                            </div>
                         </div>
                     </div>
 

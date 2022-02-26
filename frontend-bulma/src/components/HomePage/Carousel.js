@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
-import PlantService from '../Plants/plant-service';
 import CarouselItem from './CarouselItem';
 
 const CarouselPlants = props => {
@@ -9,14 +8,6 @@ const CarouselPlants = props => {
     useEffect(() => {
         setProducts(props.allProducts);
     }, [props.allProducts]);
-
-    // const servicePlants = new PlantService();
-
-    // const fetchAllProducts = () => {
-    //     servicePlants.getAllPlants()
-    //         .then(response => setProducts(response))
-    //         .catch(err => setProducts(false))
-    // };
 
     const responsive = {
         desktop: {
@@ -38,9 +29,10 @@ const CarouselPlants = props => {
 
     return (
         <div className='carousel-div'>
+            <h2 className=''>Some of our Products</h2>
             {products &&
                 <Carousel responsive={responsive} showDots={true} itemClass="carousel-item" autoPlay={true} autoPlaySpeed={3000} infinite={true}>
-                    {products.map(plant => <CarouselItem key={plant.plantName} {...plant} />)}
+                    {[...products].splice(0, 5).map(plant => <CarouselItem key={plant.plantName} {...plant} />)}
                 </Carousel>
             }
         </div>
