@@ -34,10 +34,12 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.enable('trust proxy');
 
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(favicon(path.join(__dirname, 'public', 'images', 'favicon.ico')));
 
 // default value for title local
@@ -50,24 +52,26 @@ app.use(session({
   secret: 'irongenerator',
   resave: false,
   saveUninitialized: false,
+  proxy: true,
   store: MongoStore.create({
     mongoUrl: process.env.MONGODB_URI,
-    ttl: 60 * 60 * 24
+    ttl: 60 * 60 * 24,
+    collectionName: 'sessions'
   }),
   cookie: {
-    maxAge: 1000 * 60 * 60 * 24 * 365,
-    // sameSite: "none",
+    maxAge: 1000 * 60 * 60 * 24,
+    sameSite: "none",
     secure: process.env.NODE_ENV === "production",
   }
 }));
 
-app.use(flash());
 require('./passport')(app);
+app.use(flash());
 
 app.use(
   cors({
     credentials: true,
-    origin: process.env.FRONTEND_POINT
+    origin: [process.env.FRONTEND_POINT, 'http://localhost:3000', process.env.FRONTEND_CPANEL]
   })
 );
 
@@ -83,7 +87,6 @@ app.use('/api', plantsRoutes);
 const index = require('./routes/index');
 app.use('/', index);
 
-app.use(express.static(path.join(__dirname, 'public')));
 app.get("*", (req, res, next) => {
   // If no routes match, send them the React HTML.
   res.sendFile(__dirname + "/public/index.html");
