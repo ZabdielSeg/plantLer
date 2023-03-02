@@ -52,7 +52,7 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   store: MongoStore.create({
-    mongoUrl: 'mongodb://localhost/backend',
+    mongoUrl: process.env.MONGODB_URI,
     ttl: 60 * 60 * 24
   }),
   cookie: {
@@ -68,7 +68,7 @@ require('./passport')(app);
 app.use(
   cors({
     credentials: true,
-    origin: ["http://localhost:3000"],
+    origin: [process.env.FRONTEND_POINT],
   })
 );
 
