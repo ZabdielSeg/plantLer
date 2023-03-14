@@ -169,11 +169,7 @@ const Signup = props => {
                     }
 
                     <div className="buttons is-centered">
-                        {/* <div className="control"> */}
                         <button className="button is-success is-rounded">Create Account</button>
-                        {/* </div> */}
-                        {/* <div className="control"> */}
-                        {/* </div> */}
                     </div>
 
                     <div className='buttons is-right'>
